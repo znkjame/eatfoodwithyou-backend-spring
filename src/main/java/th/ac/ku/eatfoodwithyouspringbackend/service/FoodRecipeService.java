@@ -33,20 +33,6 @@ public class FoodRecipeService {
     }
 
     public FoodRecipe create(FoodRecipe foodRecipe){
-        List<Ingredient> ingredients = foodRecipe.getIngredients();
-        if(ingredients != null) {
-            for (Ingredient ingredient : ingredients) {
-                ingredient.setFoodRecipe(foodRecipe);
-                ingredientRepository.save(ingredient);
-            }
-        }
-        List<Process> processes = foodRecipe.getProcesses();
-        if(processes != null) {
-            for (Process process : processes) {
-                process.setFoodRecipe(foodRecipe);
-                processRepository.save(process);
-            }
-        }
         foodRecipeRepository.save(foodRecipe);
         return foodRecipe;
     }
@@ -60,7 +46,7 @@ public class FoodRecipeService {
         if(modifyFoodRecipe.getPhoto() != null)
         foodRecipe.setPhoto(modifyFoodRecipe.getPhoto());
         foodRecipeRepository.save(foodRecipe);
-        return foodRecipe;
+        return modifyFoodRecipe;
     }
 
     public List<FoodRecipe> searchByName(String name){
@@ -79,5 +65,11 @@ public class FoodRecipeService {
 
     public FoodRecipe randomFoodRecipe(){
         return foodRecipeRepository.findAllByRandom();
+    }
+
+    public FoodRecipe delete(int id){
+        FoodRecipe foodRecipe = foodRecipeRepository.findById(id).get();
+        foodRecipeRepository.delete(foodRecipe);
+        return foodRecipe;
     }
 }

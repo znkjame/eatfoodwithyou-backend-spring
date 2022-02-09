@@ -25,7 +25,7 @@ public class Process {
     private Timestamp updated_at;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "foodRecipe_id")
     private FoodRecipe foodRecipe;
 

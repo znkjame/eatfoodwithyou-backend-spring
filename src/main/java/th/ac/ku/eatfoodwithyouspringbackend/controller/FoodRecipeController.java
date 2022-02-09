@@ -42,4 +42,14 @@ public class FoodRecipeController {
     public FoodRecipe randomFoodRecipe(){
         return service.randomFoodRecipe();
     }
+
+    @PutMapping("/{id}")
+    public FoodRecipe update(@PathVariable("id") int id,@RequestBody FoodRecipe foodRecipe){
+        return service.update(id,foodRecipe);
+    }
+
+    @DeleteMapping("/{id}")
+    public FoodRecipe delete(@PathVariable("id") int id){
+        return service.delete(id);
+    }
 }

@@ -30,7 +30,7 @@ public class FoodRecipe {
     private Timestamp updated_at;
 
     @JsonBackReference
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="user_id")
     private User user;
 
@@ -42,6 +42,7 @@ public class FoodRecipe {
     private List<Process> processes;
 
 
+    @Column(columnDefinition = "boolean default false")
     private Boolean is_delete;
 
     public int getId() {
