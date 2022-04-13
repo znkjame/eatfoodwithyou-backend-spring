@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.FoodRecipe;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Ingredient;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Process;
+import th.ac.ku.eatfoodwithyouspringbackend.model.users.User;
 import th.ac.ku.eatfoodwithyouspringbackend.respository.FoodRecipeRepository;
 import th.ac.ku.eatfoodwithyouspringbackend.respository.IngredientRepository;
 import th.ac.ku.eatfoodwithyouspringbackend.respository.ProcessRepository;
@@ -71,5 +72,9 @@ public class FoodRecipeService {
         FoodRecipe foodRecipe = foodRecipeRepository.findById(id).get();
         foodRecipeRepository.delete(foodRecipe);
         return foodRecipe;
+    }
+
+    public List<FoodRecipe> findByCategoryName(String name){
+        return foodRecipeRepository.findByCategoriesNameContains(name);
     }
 }

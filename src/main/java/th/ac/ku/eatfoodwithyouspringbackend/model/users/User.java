@@ -1,14 +1,19 @@
 package th.ac.ku.eatfoodwithyouspringbackend.model.users;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import th.ac.ku.eatfoodwithyouspringbackend.Serializer.CustomFoodRecipeSerializer;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.FoodRecipe;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 @Entity
 public class User {
     @Id
@@ -17,14 +22,17 @@ public class User {
 
     private String name;
 
+    @JsonIgnore
     private String password;
 
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     @CreationTimestamp
     private Timestamp created_at;
 
+    @JsonIgnore
     @UpdateTimestamp
     private Timestamp updated_at;
 
@@ -36,7 +44,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FoodRecipe> foodRecipes;
 

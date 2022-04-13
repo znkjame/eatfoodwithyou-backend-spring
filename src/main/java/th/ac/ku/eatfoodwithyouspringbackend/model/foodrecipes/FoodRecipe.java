@@ -1,20 +1,27 @@
 package th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import th.ac.ku.eatfoodwithyouspringbackend.Serializer.CategorySerializer;
 import th.ac.ku.eatfoodwithyouspringbackend.model.users.User;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Entity
 public class FoodRecipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    public int id;
 
     private String name;
 
@@ -29,8 +36,8 @@ public class FoodRecipe {
     @UpdateTimestamp
     private Timestamp updated_at;
 
-    @JsonBackReference
-    @ManyToOne(cascade = CascadeType.MERGE)
+
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="user_id")
     private User user;
 
@@ -41,6 +48,13 @@ public class FoodRecipe {
     @OneToMany(mappedBy = "foodRecipe", cascade = CascadeType.ALL)
     private List<Process> processes;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "category_foodRecipe",
+            joinColumns = @JoinColumn(name = "category_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "foodRecipe_id", referencedColumnName = "id"))
+//    @JsonManagedReference
+    @JsonSerialize(using = CategorySerializer.class)
+    private List<Category> categories;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean is_delete;
@@ -123,5 +137,13 @@ public class FoodRecipe {
 
     public void setIs_delete(Boolean is_delete) {
         this.is_delete = is_delete;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }

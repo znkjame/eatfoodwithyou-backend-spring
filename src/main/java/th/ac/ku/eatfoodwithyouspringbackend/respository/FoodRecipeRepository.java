@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FoodRecipeRepository extends JpaRepository<FoodRecipe,Integer> {
     List<FoodRecipe> findFoodRecipeByNameContains(String name);
-
+    List<FoodRecipe> findByCategoriesNameContains(String name);
 //    List<FoodRecipe> findAllByIs_deleteFalse();
 
     @Query(nativeQuery = true,value = "SELECT * FROM food_recipe ORDER BY RAND() LIMIT 3")
