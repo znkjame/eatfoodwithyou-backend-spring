@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import th.ac.ku.eatfoodwithyouspringbackend.Serializer.CustomFoodRecipeSerializer;
+import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Comment;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.FoodRecipe;
+
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -47,6 +49,14 @@ public class User {
     @JsonBackReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FoodRecipe> foodRecipes;
+
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+    @ManyToMany(mappedBy = "likeUsers")
+    private List<FoodRecipe> likeFoodRecipes;
+//    @OneToMany(mappedBy = "likeUser")
+//    private List<Like> likes;
 
     public Gender getGender() {
         return gender;

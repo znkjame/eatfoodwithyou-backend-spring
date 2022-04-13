@@ -1,11 +1,10 @@
 package th.ac.ku.eatfoodwithyouspringbackend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+import th.ac.ku.eatfoodwithyouspringbackend.Exception.NotFoundException;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.FoodRecipe;
-import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Ingredient;
-import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Process;
-import th.ac.ku.eatfoodwithyouspringbackend.model.users.User;
 import th.ac.ku.eatfoodwithyouspringbackend.respository.FoodRecipeRepository;
 import th.ac.ku.eatfoodwithyouspringbackend.respository.IngredientRepository;
 import th.ac.ku.eatfoodwithyouspringbackend.respository.ProcessRepository;
@@ -29,8 +28,8 @@ public class FoodRecipeService {
         return foodRecipeRepository.findAll();
     }
 
-    public FoodRecipe getByID(int id){
-        return foodRecipeRepository.findById(id).get();
+    public FoodRecipe findByID(int id){
+        return foodRecipeRepository.findById(id).orElseThrow(() -> new NotFoundException(id,"FoodRecipe"));
     }
 
     public FoodRecipe create(FoodRecipe foodRecipe){
@@ -39,7 +38,7 @@ public class FoodRecipeService {
     }
 
     public FoodRecipe update(int foodRecipe_id, FoodRecipe modifyFoodRecipe){
-        FoodRecipe foodRecipe = foodRecipeRepository.findById(foodRecipe_id).get();
+        FoodRecipe foodRecipe = foodRecipeRepository.findById(foodRecipe_id).orElseThrow(() -> new NotFoundException(foodRecipe_id,"FoodRecipe"));
         if(modifyFoodRecipe.getName() != null)
         foodRecipe.setName(modifyFoodRecipe.getName());
         if(modifyFoodRecipe.getDetail() != null)
@@ -69,7 +68,7 @@ public class FoodRecipeService {
     }
 
     public FoodRecipe delete(int id){
-        FoodRecipe foodRecipe = foodRecipeRepository.findById(id).get();
+        FoodRecipe foodRecipe = foodRecipeRepository.findById(id).orElseThrow(() -> new NotFoundException(id,"FoodRecipe"));
         foodRecipeRepository.delete(foodRecipe);
         return foodRecipe;
     }
@@ -77,4 +76,6 @@ public class FoodRecipeService {
     public List<FoodRecipe> findByCategoryName(String name){
         return foodRecipeRepository.findByCategoriesNameContains(name);
     }
+
+
 }

@@ -39,16 +39,15 @@ public class FoodRecipeController {
                 User user = userService.findByID(foodRecipe.getUser().getId());
                 if (user != null)
                     foodRecipe.setUser(user);
-//                List<Category> categoryList = new ArrayList<>();
-//                if(!foodRecipe.getCategories().isEmpty()){
-//                    for (Category category : foodRecipe.getCategories()){
-//                        Category target = categoryService.findByName(category.getName());
-//                        if (target != null)
-//                            categoryList.add(target);
-//                    }
-//                }
-//                System.out.println(categoryList);
-//                foodRecipe.setCategories(categoryList);
+                List<Category> categoryList = new ArrayList<>();
+                if(!foodRecipe.getCategories().isEmpty()){
+                    for (Category category : foodRecipe.getCategories()){
+                        Category target = categoryService.findByName(category.getName());
+                        if (target != null)
+                            categoryList.add(target);
+                    }
+                }
+                foodRecipe.setCategories(categoryList);
                 FoodRecipe result =  service.create(foodRecipe);
                 return ResponseHandler.generateResponse("Successfull!", HttpStatus.OK, result);
             }
@@ -65,7 +64,7 @@ public class FoodRecipeController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getByID(@PathVariable("id") int id){
         try {
-            FoodRecipe result = service.getByID(id);
+            FoodRecipe result = service.findByID(id);
             return ResponseHandler.generateResponse("Successfull!", HttpStatus.OK, result);
         }
         catch (Exception e){

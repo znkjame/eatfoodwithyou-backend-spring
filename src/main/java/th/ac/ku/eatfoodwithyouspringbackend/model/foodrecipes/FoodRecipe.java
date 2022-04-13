@@ -8,11 +8,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import th.ac.ku.eatfoodwithyouspringbackend.Serializer.CategorySerializer;
+import th.ac.ku.eatfoodwithyouspringbackend.Serializer.LikeUserSerializer;
 import th.ac.ku.eatfoodwithyouspringbackend.model.users.User;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -50,14 +52,43 @@ public class FoodRecipe {
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "category_foodRecipe",
-            joinColumns = @JoinColumn(name = "category_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "foodRecipe_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "foodRecipe_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id", referencedColumnName = "id"))
 //    @JsonManagedReference
     @JsonSerialize(using = CategorySerializer.class)
     private List<Category> categories;
 
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "likes",
+            joinColumns = @JoinColumn(name = "foodRecipe_id",referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id",referencedColumnName = "id"))
+    @JsonSerialize(using = LikeUserSerializer.class)
+    private List<User> likeUsers;
+
+//    @OneToMany(mappedBy = "likeFoodRecipe")
+//    List<Like> likes;
+
+    @OneToMany(mappedBy = "foodRecipe")
+    private List<Comment> comments;
+
     @Column(columnDefinition = "boolean default false")
     private Boolean is_delete;
+
+    public List<User> getUsers() {
+        return likeUsers;
+    }
+
+    public void setUsers(List<User> users) {
+        this.likeUsers = users;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
 
     public int getId() {
         return id;

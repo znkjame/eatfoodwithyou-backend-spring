@@ -2,28 +2,32 @@ package th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import th.ac.ku.eatfoodwithyouspringbackend.model.users.User;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
-public class Category {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+    private int id;
 
-    @Column(unique = true)
-    public String name;
+    private String isComment;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "foodRecipe_id")
+    private FoodRecipe foodRecipe;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @CreationTimestamp
     private Timestamp created_at;
 
     @UpdateTimestamp
     private Timestamp updated_at;
-
-    @ManyToMany(mappedBy = "categories")
-    private List<FoodRecipe> foodRecipes;
 
     public int getId() {
         return id;
@@ -33,12 +37,28 @@ public class Category {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getIsComment() {
+        return isComment;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIsComment(String isComment) {
+        this.isComment = isComment;
+    }
+
+    public FoodRecipe getFoodRecipe() {
+        return foodRecipe;
+    }
+
+    public void setFoodRecipe(FoodRecipe foodRecipe) {
+        this.foodRecipe = foodRecipe;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Timestamp getCreated_at() {
@@ -55,13 +75,5 @@ public class Category {
 
     public void setUpdated_at(Timestamp updated_at) {
         this.updated_at = updated_at;
-    }
-
-    public List<FoodRecipe> getFoodRecipes() {
-        return foodRecipes;
-    }
-
-    public void setFoodRecipes(List<FoodRecipe> foodRecipes) {
-        this.foodRecipes = foodRecipes;
     }
 }
