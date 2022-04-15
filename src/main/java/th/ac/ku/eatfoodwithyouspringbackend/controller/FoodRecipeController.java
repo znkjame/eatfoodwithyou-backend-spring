@@ -1,20 +1,28 @@
 package th.ac.ku.eatfoodwithyouspringbackend.controller;
 
+import javafx.scene.image.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Category;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.FoodRecipe;
+import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Ingredient;
+import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Process;
 import th.ac.ku.eatfoodwithyouspringbackend.model.users.User;
 import th.ac.ku.eatfoodwithyouspringbackend.service.CategoryService;
 import th.ac.ku.eatfoodwithyouspringbackend.service.FoodRecipeService;
 import th.ac.ku.eatfoodwithyouspringbackend.service.ResponseHandler;
 import th.ac.ku.eatfoodwithyouspringbackend.service.UserService;
+import th.ac.ku.eatfoodwithyouspringbackend.service.storage.FileSystemStorageService;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -26,6 +34,8 @@ public class FoodRecipeController {
     private UserService userService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private FileSystemStorageService fileSystemStorageService;
 
     @GetMapping
     public List<FoodRecipe> getAll(){
@@ -48,6 +58,8 @@ public class FoodRecipeController {
                     }
                 }
                 foodRecipe.setCategories(categoryList);
+//                String fileName = fileSystemStorageService.store(file,"foodRecipes");
+//                foodRecipe.setPhoto(fileName);
                 FoodRecipe result =  service.create(foodRecipe);
                 return ResponseHandler.generateResponse("Successfull!", HttpStatus.OK, result);
             }
@@ -59,8 +71,45 @@ public class FoodRecipeController {
         catch (Exception e){
             return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.BAD_REQUEST, null);
         }
-
     }
+//    @PostMapping
+//    public ResponseEntity<Object> create(@RequestParam("name") String name, @RequestParam("detail") String detail,
+//                                         @RequestParam("user_id") int user_id, @RequestParam("ingredients")List<Ingredient> ingredients,
+//                                         @RequestParam("processes") List<Process> processes, @RequestParam("categories") String categories,
+//                                         @RequestParam("photo") MultipartFile photo
+//                                        ){
+//        try {
+//            FoodRecipe foodRecipe = new FoodRecipe();
+//            if (user_id != 0) {
+//                User user = userService.findByID(user_id);
+//                if (user != null)
+//                    foodRecipe.setUser(user);
+//                List<Category> categoryList = new ArrayList<>();
+//                if(!categories.isEmpty()){
+//                    String[] categoriesArr = categories.split(",");
+//                    for (String category : categoriesArr){
+//                        Category target = categoryService.findByName(category);
+//                        if (target != null)
+//                            categoryList.add(target);
+//                    }
+//                }
+//                foodRecipe.setCategories(categoryList);
+//                foodRecipe.setIngredients(ingredients);
+//                foodRecipe.setProcesses(processes);
+//                String fileName = fileSystemStorageService.store(photo,"foodRecipes");
+//                foodRecipe.setPhoto(fileName);
+//                FoodRecipe result =  service.create(foodRecipe);
+//                return ResponseHandler.generateResponse("Successfull!", HttpStatus.OK, result);
+//            }
+//            else {
+//                return ResponseHandler.generateResponse("Please input user!!",HttpStatus.BAD_REQUEST, null);
+//            }
+//
+//        }
+//        catch (Exception e){
+//            return ResponseHandler.generateResponse(e.getMessage(),HttpStatus.BAD_REQUEST, null);
+//        }
+//    }
     @GetMapping("/{id}")
     public ResponseEntity<Object> getByID(@PathVariable("id") int id){
         try {
@@ -108,4 +157,18 @@ public class FoodRecipeController {
     }
 
 
+//    @PostMapping("/recipe/photo/upload/{id}")
+//    public ResponseEntity<Object> uploadImage(@RequestParam("photo") MultipartFile photo, @PathVariable int id) throws IOException {
+//        FoodRecipe foodRecipe = service.findByID(id);
+//        foodRecipe.setPhoto(photo.getBytes());
+//        FoodRecipe result = service.update(id,foodRecipe);
+//        return ResponseHandler.generateResponse("Upload photo sucess!!", HttpStatus.OK,result);
+//    }
+//
+//    @GetMapping("/photo/{id}")
+//    public ResponseEntity<Object> getImage(@PathVariable int id){
+//        FoodRecipe foodRecipe = service.findByID(id);
+//        final Optional<Image> image = foodRecipe.getPhoto();
+//
+//    }
 }
