@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import th.ac.ku.eatfoodwithyouspringbackend.model.foodrecipes.Category;
 import th.ac.ku.eatfoodwithyouspringbackend.service.CategoryService;
-import th.ac.ku.eatfoodwithyouspringbackend.service.ResponseHandler;
+import th.ac.ku.eatfoodwithyouspringbackend.response.ResponseHandler;
 
 import java.util.List;
 

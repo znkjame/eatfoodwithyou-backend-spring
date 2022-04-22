@@ -8,10 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import th.ac.ku.eatfoodwithyouspringbackend.response.PhotoResponse;
-import th.ac.ku.eatfoodwithyouspringbackend.service.ResponseHandler;
+import th.ac.ku.eatfoodwithyouspringbackend.response.ResponseHandler;
 import th.ac.ku.eatfoodwithyouspringbackend.service.storage.FileSystemStorageService;
 
 import javax.servlet.http.HttpServletRequest;
